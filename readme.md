@@ -8,7 +8,7 @@
 ### 2
 When we read values from the brake sensor (C1) and the apps (C3) we do not use the most recent reading and use instead a different approach. Explain the approach and why you think it is used.
 
-**Answer:** *Insert answer*
+**Answer:** Ao fazer a média das ultimas mediçõe os dados sao mais estaveis e evita que o sistema tome decisões imprecisas devido a um dado fora do normal
 
 
 ### 3
@@ -24,58 +24,54 @@ Check out the R2D(Ready To Drive) code on the C3 state machine. In the condition
         }
 ```
 
-**Answer:** *Insert answer*
+**Answer:** Ao verificar se o pedal foi acionado por um periodo de tempo evita que o carro entre em r2d acidentalmente
 ### 4
 What is the ID of the can message sent to the bamocar to request torque?
-**Answer:** *Insert answer*
+**Answer:** *0x201*
 ### 5 
 The code below is not amazing, tell us some things you would change to improve it, you can write them down in text or correct the code:
 ```c++
-// this is a class for my car
+
 class mycar {
 private:
-    int sensor_reading1; // hydraulic pressure sensor
-    int sensor_reading2; // temperature sensor
-    int sensor_reading3; // humidity sensor
-    int sensor_reading4; // light sensor
-    int sensor_reading5; // sound sensor
-    int sensor_reading6; // distance sensor
-    int sensor_reading7; // accelerometer sensor
-    int sensor_reading8; // gyroscope sensor
-
-    int sensor_reading9; // old sensor, not used anymore
-
+    int sensor_reading[7];
+    int vector_size=8; 
+    /*
+    posição no vetor de cada sensor:
+    0; // hydraulic pressure sensor
+    1; // temperature sensor
+    2; // humidity sensor
+    3; // light sensor
+    4; // sound sensor
+    5; // distance sensor
+    6; // accelerometer sensor
+    7; // gyroscope sensor
+    */
+    //retirar sensor_reading9 pq ja n está em uso
 public:
-    mycar() : sensor_reading1(0), sensor_reading2(0), sensor_reading3(0), sensor_reading4(0),
-            sensor_reading5(0), sensor_reading6(0), sensor_reading7(0), sensor_reading8(0) {}
+    mycar() {
+        for (int k = 0; k < vector_size; k++) {
+            sensor_reading[k] = 0;
+        }
+    }
 
     // Method will update readings by analog reading and print them 
     void updateprint() {
-        sensor_reading1 = analogRead(0); // pin 0 is connected to the hydraulic pressure sensor
-        sensor_reading2 = analogRead(1); // pin 1 is connected to the temperature sensor
-        sensor_reading3 = analogRead(2); // pin 2 is connected to the humidity sensor
-        sensor_reading4 = analogRead(3); // pin 3 is connected to the light sensor
-        sensor_reading5 = analogRead(4); // pin 4 is connected to the sound sensor
-        sensor_reading6 = analogRead(5); // pin 5 is connected to the distance sensor
-        sensor_reading7 = analogRead(6); // pin 6 is connected to the accelerometer sensor
-        sensor_reading8 = analogRead(7); // pin 7 is connected to the gyroscope sensor
-        func(sensor_reading1, sensor_reading2, sensor_reading3, sensor_reading4, 
-              sensor_reading5, sensor_reading6, sensor_reading7, sensor_reading8);// print the readings
+        //trocar os int pelo vector
+        for (int u = 0; i < 8; i++) {
+            sensor_reading[u] = analogRead(u);
+        }
+        int i=0;
+
+        while(i<vector_size){
+            func(sensor_reading[], i);// print the readings
+        }
     }
 
-    // function to print the readings of the sensors
-    void func(int sensor_reading1, int sensor_reading2, int sensor_reading3, int sensor_reading4, 
-              int sensor_reading5, int sensor_reading6, int sensor_reading7, int sensor_reading8) {
-        Serial.print("Sensor Reading 1: "); Serial.println(sensor_reading1);
-        Serial.print("Sensor Reading 2: "); Serial.println(sensor_reading2);
-        Serial.print("Sensor Reading 3: "); Serial.println(sensor_reading3);
-        Serial.print("Sensor Reading 4: "); Serial.println(sensor_reading4);
-        Serial.print("Sensor Reading 5: "); Serial.println(sensor_reading5);
-        Serial.print("Sensor Reading 6: "); Serial.println(sensor_reading6);
-        Serial.print("Sensor Reading 7: "); Serial.println(sensor_reading7);
-        Serial.print("Sensor Reading 8: "); Serial.println(sensor_reading8);
-        //all readings were serial printed
+    //trocar a função para ser chamada varias vezes em vez de só uma fazendo com que se for adicionado um vetor seja mais facil de implementar
+    void func(int vector sensor[], pos) {
+        Serial.print("Sensor Reading %d: ",pos+1); 
+        Serial.println(sensor[pos+1]);
+
     }
 };
-```
-
