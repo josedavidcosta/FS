@@ -34,7 +34,7 @@ The code below is not amazing, tell us some things you would change to improve i
 
 class mycar {
 private:
-    int sensor_reading[7];
+    int sensor_reading[8];
     int vector_size=8; 
     /*
     posição no vetor de cada sensor:
@@ -55,21 +55,19 @@ public:
         }
     }
 
-    // Method will update readings by analog reading and print them 
     void updateprint() {
         //trocar os int pelo vector
-        for (int u = 0; i < 8; i++) {
+        for (int u = 0; u < 8; u++) {
             sensor_reading[u] = analogRead(u);
         }
-        int i=0;
 
-        while(i<vector_size){
-            func(sensor_reading[], i);// print the readings
+         for (int i = 0; i < vector_size; i++){
+            func(sensor_reading, i);// print the readings
         }
     }
 
     //trocar a função para ser chamada varias vezes em vez de só uma fazendo com que se for adicionado um vetor seja mais facil de implementar
-    void func(int vector sensor[], pos) {
+    void func(int sensor[], int pos) {
         Serial.print("Sensor Reading %d: ",pos+1); 
         Serial.println(sensor[pos+1]);
 
